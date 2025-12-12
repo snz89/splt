@@ -1,10 +1,8 @@
 use std::{
-    error::Error,
-    fmt::Display,
-    fs,
-    io::{self},
-    path::Path,
+    fs, io::{self}, path::Path
 };
+
+use thiserror::Error;
 
 #[derive(Debug)]
 pub struct Batch {
@@ -44,16 +42,9 @@ pub fn line_weight(length: usize, max_length: usize) -> usize {
     (length - 1) / max_length + 1
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Clone, Error)]
+#[error("Number of weights must be at least 1")]
 pub struct NotEnoughWeightsError;
-
-impl Display for NotEnoughWeightsError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "number of weights must be at least 1")
-    }
-}
-
-impl Error for NotEnoughWeightsError {}
 
 pub fn collect_lines_to_batches(
     lines: &[String],
@@ -62,10 +53,7 @@ pub fn collect_lines_to_batches(
 ) -> Result<Vec<Batch>, NotEnoughWeightsError> {
     let mut batches = Vec::new();
     let mut current_batch = Batch::new();
-    let mut allowable_weight = match batch_weights.next() {
-        Some(weight) => weight,
-        None => return Err(NotEnoughWeightsError),
-    };
+    let mut allowable_weight = batch_weights.next().ok_or(NotEnoughWeightsError)?;
 
     for line in lines {
         let line_weight = line_weight(line.len(), max_line_length);
