@@ -5,7 +5,7 @@ use std::{
 
 use anyhow::{Context, Result};
 
-use crate::cli::BatchConfig;
+use crate::{batching::BatchesIterator, cli::BatchConfig};
 
 mod batching;
 mod cli;
@@ -15,13 +15,14 @@ fn main() -> Result<()> {
 
     let file = File::open(config.input_path).context("Cannot open input file")?;
     let reader = BufReader::new(file);
-    let lines: Vec<String> = reader.lines().filter_map(Result::ok).collect();
-    let batches = batching::collect_lines_to_batches(
-        &lines,
+    let lines = reader.lines().filter_map(Result::ok);
+    let batches = BatchesIterator::new(
+        lines.into_iter(),
         config.max_line_length,
-        &mut config.weigths.into_iter(),
+        config.weights.into_iter(),
     )?;
-    batching::write_batches(&batches, &config.output_dir)?;
+
+    batching::write_batches(batches, &config.output_dir)?;
 
     Ok(())
 }

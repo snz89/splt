@@ -1,7 +1,8 @@
 use std::path::PathBuf;
 
 use clap::{
-    CommandFactory, Error, FromArgMatches, Parser, builder::{Styles, styling::AnsiColor}
+    CommandFactory, Error, FromArgMatches, Parser,
+    builder::{Styles, styling::AnsiColor},
 };
 
 #[derive(Debug, Parser)]
@@ -16,7 +17,7 @@ pub struct BatchConfig {
     #[arg(short, long, default_values_t = [55, 61], help = "Maximum number of lines in a batch considering line wrapping.
 Multiple values can be specified; if there are more batches than values,
 the last value will be used for the remaining batches")]
-    pub weigths: Vec<usize>,
+    pub weights: Vec<usize>,
 
     #[arg(
         short,
