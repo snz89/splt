@@ -25,7 +25,7 @@ impl Batch {
     pub fn weight(&self, max_line_length: usize) -> usize {
         self.inner
             .iter()
-            .map(|l| line_weight(l.len(), max_line_length))
+            .map(|l| line_weight(l.chars().count(), max_line_length))
             .sum()
     }
 
@@ -56,7 +56,7 @@ pub fn collect_lines_to_batches(
     let mut allowable_weight = batch_weights.next().ok_or(NotEnoughWeightsError)?;
 
     for line in lines {
-        let line_weight = line_weight(line.len(), max_line_length);
+        let line_weight = line_weight(line.chars().count(), max_line_length);
         if current_batch.weight(max_line_length) + line_weight > allowable_weight {
             batches.push(current_batch);
             current_batch = Batch::new();
