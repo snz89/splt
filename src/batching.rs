@@ -38,7 +38,7 @@ impl Batch {
         max_line_length: usize,
         allowable_weight: usize,
     ) -> bool {
-        self.weight(max_line_length) + line_weight > allowable_weight
+        self.weight(max_line_length) + line_weight <= allowable_weight
     }
 
     pub fn lines(&self) -> &[String] {
