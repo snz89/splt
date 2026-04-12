@@ -10,11 +10,17 @@ use thiserror::Error;
 #[derive(Debug)]
 pub struct Batch {
     inner: Vec<String>,
+    max_line_length: usize,
+    max_weight: usize,
 }
 
 impl Batch {
-    pub fn new() -> Self {
-        Self { inner: Vec::new() }
+    pub fn new(max_line_length: usize, max_weight: usize) -> Self {
+        Self {
+            inner: Vec::new(),
+            max_line_length,
+            max_weight,
+        }
     }
 
     pub fn push(&mut self, value: String) {
@@ -35,10 +41,8 @@ impl Batch {
     pub fn can_accommodate(
         &self,
         line_weight: usize,
-        max_line_length: usize,
-        allowable_weight: usize,
     ) -> bool {
-        self.weight(max_line_length) + line_weight <= allowable_weight
+        self.weight(self.max_line_length) + line_weight <= self.max_weight
     }
 
     pub fn lines(&self) -> &[String] {
@@ -97,12 +101,12 @@ where
     type Item = Batch;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut batch = Batch::new();
+        let mut batch = Batch::new(self.max_line_length, self.allowable_weight);
 
         while let Some(line) = self.lines.peek() {
             let line_weight = line_weight(line.chars().count(), self.max_line_length);
 
-            if !batch.can_accommodate(line_weight, self.max_line_length, self.allowable_weight) {
+            if !batch.can_accommodate(line_weight) {
                 if let Some(weight) = self.batch_weights.next() {
                     self.allowable_weight = weight;
                 }
