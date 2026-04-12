@@ -15,7 +15,7 @@ fn main() -> Result<()> {
 
     let file = File::open(config.input_path).context("Cannot open input file")?;
     let reader = BufReader::new(file);
-    let lines = reader.lines().filter_map(Result::ok);
+    let lines = reader.lines().map_while(Result::ok);
     let batches = BatchesIterator::new(
         lines.into_iter(),
         config.max_line_length,

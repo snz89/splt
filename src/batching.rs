@@ -105,7 +105,7 @@ where
         let mut batch = Batch::new(self.max_line_length, self.max_batch_weight);
 
         while let Some(line) = self.lines.peek() {
-            if !batch.can_accommodate(&line) {
+            if !batch.can_accommodate(line) {
                 if let Some(weight) = self.batch_weights.next() {
                     self.max_batch_weight = weight;
                 }
@@ -128,7 +128,7 @@ pub fn write_batches(batches: impl Iterator<Item = Batch>, output_dir: &Path) ->
     fs::create_dir_all(output_dir)?;
 
     for (batch_id, batch) in batches.enumerate() {
-        let batch_path = output_dir.join(format!("batch_{}.txt", batch_id));
+        let batch_path = output_dir.join(format!("batch_{batch_id}.txt"));
         let content = batch.lines().join("\n");
         fs::write(batch_path, content)?;
     }

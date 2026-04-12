@@ -30,7 +30,7 @@ the last value will be used for the remaining batches")]
 
 impl BatchConfig {
     pub fn build() -> Result<Self, Error> {
-        let mut command = BatchConfig::command();
+        let mut command = Self::command();
 
         let styles = Styles::styled()
             .header(AnsiColor::Yellow.on_default())
@@ -41,6 +41,6 @@ impl BatchConfig {
         command = command.styles(styles);
 
         let mut matches = command.get_matches();
-        return BatchConfig::from_arg_matches_mut(&mut matches);
+        Self::from_arg_matches_mut(&mut matches)
     }
 }
