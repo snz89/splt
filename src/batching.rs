@@ -71,7 +71,7 @@ where
     lines: Peekable<Lines>,
     batch_weights: Weights,
     max_line_length: usize,
-    allowable_weight: usize,
+    max_batch_weight: usize,
 }
 
 impl<Lines, Weights> BatchesIterator<Lines, Weights>
@@ -89,7 +89,7 @@ where
             lines: lines.peekable(),
             batch_weights,
             max_line_length,
-            allowable_weight,
+            max_batch_weight: allowable_weight,
         })
     }
 }
@@ -102,12 +102,12 @@ where
     type Item = Batch;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut batch = Batch::new(self.max_line_length, self.allowable_weight);
+        let mut batch = Batch::new(self.max_line_length, self.max_batch_weight);
 
         while let Some(line) = self.lines.peek() {
             if !batch.can_accommodate(&line) {
                 if let Some(weight) = self.batch_weights.next() {
-                    self.allowable_weight = weight;
+                    self.max_batch_weight = weight;
                 }
 
                 return Some(batch);
