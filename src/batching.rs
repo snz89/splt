@@ -40,8 +40,9 @@ impl Batch {
 
     pub fn can_accommodate(
         &self,
-        line_weight: usize,
+        line: &str,
     ) -> bool {
+        let line_weight = line_weight(line.chars().count(), self.max_line_length);
         self.weight(self.max_line_length) + line_weight <= self.max_weight
     }
 
@@ -104,9 +105,7 @@ where
         let mut batch = Batch::new(self.max_line_length, self.allowable_weight);
 
         while let Some(line) = self.lines.peek() {
-            let line_weight = line_weight(line.chars().count(), self.max_line_length);
-
-            if !batch.can_accommodate(line_weight) {
+            if !batch.can_accommodate(&line) {
                 if let Some(weight) = self.batch_weights.next() {
                     self.allowable_weight = weight;
                 }
