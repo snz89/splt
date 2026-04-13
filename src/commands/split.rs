@@ -1,4 +1,5 @@
 use std::{
+    collections::HashMap,
     fs::{self, File},
     io::{self, BufRead, BufReader, BufWriter, IsTerminal, Write},
     path::Path,
@@ -31,15 +32,22 @@ pub(crate) fn handle(args: SplitArgs) -> Result<()> {
         args.weights.into_iter(),
     )?;
 
-    write_batches(batches, &args.output_dir)?;
+    write_batches(batches, &args.output_dir, &args.name_template)?;
     Ok(())
 }
 
-fn write_batches(batches: impl Iterator<Item = Batch>, output_dir: &Path) -> io::Result<()> {
+fn write_batches(
+    batches: impl Iterator<Item = Batch>,
+    output_dir: &Path,
+    batch_name_template: &str,
+) -> Result<()> {
     fs::create_dir_all(output_dir)?;
 
+    let mut vars = HashMap::new();
+
     for (batch_id, batch) in batches.enumerate() {
-        let batch_path = output_dir.join(format!("batch_{batch_id}.txt"));
+        vars.insert("id".to_owned(), batch_id.to_string());
+        let batch_path = output_dir.join(strfmt::strfmt(batch_name_template, &vars)?);
         let file = File::create(batch_path)?;
         let mut writer = BufWriter::new(file);
 
@@ -53,5 +61,5 @@ fn write_batches(batches: impl Iterator<Item = Batch>, output_dir: &Path) -> io:
         writer.flush()?;
     }
 
-    std::result::Result::Ok(())
+    Ok(())
 }

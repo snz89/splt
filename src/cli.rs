@@ -23,7 +23,7 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Commands {
     Split(SplitArgs),
-    Ipynb(IpynbConvertArgs)
+    Ipynb(IpynbConvertArgs),
 }
 
 #[derive(Args)]
@@ -47,7 +47,7 @@ pub struct SplitArgs {
     pub output_dir: PathBuf,
 
     #[arg(short = 't', long, default_value = "{id}.txt")]
-    pub name_template: String
+    pub name_template: String,
 }
 
 #[derive(Args)]
