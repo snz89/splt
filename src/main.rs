@@ -12,8 +12,8 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Split(args) => commands::split::handle(args)?,
+        Commands::Split(split_args) => commands::split::handle(split_args)?,
     };
-
+    
     Ok(())
 }

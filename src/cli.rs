@@ -47,12 +47,14 @@ pub struct SplitArgs {
 }
 
 #[derive(Args)]
-#[command(about = "Converts an .ipynb file to a regular .py file")]
+#[command(
+    about = "Extracts code cells from a specified .ipynb file and generates a standard .py file"
+)]
 pub struct IpynbConvertArgs {
-    /// Input file to process
+    /// Path to the source .ipynb notebook
     pub input_path: Option<PathBuf>,
 
-    /// Path to the file where the result will be saved
-    #[arg(short, long, default_value = "batches")]
-    pub output_dir: Option<PathBuf>,
+    /// Path to the resulting .py file
+    #[arg(short, long)]
+    pub output_path: Option<PathBuf>,
 }
