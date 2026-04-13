@@ -14,7 +14,7 @@ fn get_styles() -> Styles {
 }
 
 #[derive(Debug, Parser)]
-#[command(about = "Split a file into multiple batches", long_about = None, styles = get_styles())]
+#[command(about = "Split a file into multiple batches", long_about = None, styles = get_styles(), version)]
 pub struct BatchConfig {
     /// Input file to process
     pub input_path: PathBuf,
