@@ -3,7 +3,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Ok, Result};
 use clap::Parser;
 
 use crate::{batching::BatchesIterator, cli::BatchConfig};
@@ -11,9 +11,7 @@ use crate::{batching::BatchesIterator, cli::BatchConfig};
 mod batching;
 mod cli;
 
-fn main() -> Result<()> {
-    let config = BatchConfig::parse();
-
+fn handle(config: BatchConfig) -> Result<()> {
     let file = File::open(config.input_path).context("Cannot open input file")?;
     let reader = BufReader::new(file);
     let lines = reader.lines().map_while(Result::ok);
@@ -24,6 +22,11 @@ fn main() -> Result<()> {
     )?;
 
     batching::write_batches(batches, &config.output_dir)?;
+    Ok(())
+}
 
+fn main() -> Result<()> {
+    let config = BatchConfig::parse();
+    handle(config)?;
     Ok(())
 }
