@@ -17,7 +17,7 @@ fn get_styles() -> Styles {
 #[command(about = "Split a file into multiple batches", long_about = None, styles = get_styles(), version)]
 pub struct BatchConfig {
     /// Input file to process
-    pub input_path: PathBuf,
+    pub input_path: Option<PathBuf>,
 
     /// Max length of line
     #[arg(short, long, default_value_t = 80)]

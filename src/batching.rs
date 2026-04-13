@@ -6,7 +6,7 @@ use std::{
     path::Path,
 };
 
-use thiserror::Error;
+use crate::errors::NotEnoughWeightsError;
 
 #[derive(Debug)]
 pub struct Batch {
@@ -53,10 +53,6 @@ pub fn line_weight(length: usize, max_length: usize) -> usize {
 
     (length - 1) / max_length + 1
 }
-
-#[derive(Debug, PartialEq, Eq, Clone, Error)]
-#[error("Number of weights must be at least 1")]
-pub struct NotEnoughWeightsError;
 
 pub struct BatchesIterator<Lines, Weights>
 where
