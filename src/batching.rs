@@ -13,6 +13,7 @@ pub struct Batch {
     inner: Vec<String>,
     max_line_length: usize,
     max_weight: usize,
+    current_weight: usize,
 }
 
 impl Batch {
@@ -21,10 +22,13 @@ impl Batch {
             inner: Vec::new(),
             max_line_length,
             max_weight,
+            current_weight: 0,
         }
     }
 
     pub fn push(&mut self, value: String) {
+        let line_w = line_weight(value.chars().count(), self.max_line_length);
+        self.current_weight += line_w;
         self.inner.push(value);
     }
 
@@ -32,16 +36,9 @@ impl Batch {
         self.inner.is_empty()
     }
 
-    pub fn weight(&self, max_line_length: usize) -> usize {
-        self.inner
-            .iter()
-            .map(|l| line_weight(l.chars().count(), max_line_length))
-            .sum()
-    }
-
     pub fn can_accommodate(&self, line: &str) -> bool {
         let line_weight = line_weight(line.chars().count(), self.max_line_length);
-        self.weight(self.max_line_length) + line_weight <= self.max_weight
+        self.current_weight + line_weight <= self.max_weight
     }
 
     pub fn lines(&self) -> &[String] {
