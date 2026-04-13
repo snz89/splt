@@ -4,6 +4,7 @@ use std::{
 };
 
 use anyhow::{Context, Result};
+use clap::Parser;
 
 use crate::{batching::BatchesIterator, cli::BatchConfig};
 
@@ -11,7 +12,7 @@ mod batching;
 mod cli;
 
 fn main() -> Result<()> {
-    let config = BatchConfig::build()?;
+    let config = BatchConfig::parse();
 
     let file = File::open(config.input_path).context("Cannot open input file")?;
     let reader = BufReader::new(file);
