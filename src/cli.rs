@@ -45,6 +45,9 @@ pub struct SplitArgs {
     /// Output directory where generated batch files will be saved
     #[arg(short, long, default_value = "batches")]
     pub output_dir: PathBuf,
+
+    #[arg(short = 't', long, default_value = "{id}.txt")]
+    pub name_template: String
 }
 
 #[derive(Args)]
