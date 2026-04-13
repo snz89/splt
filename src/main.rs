@@ -10,6 +10,7 @@ use crate::{batching::BatchesIterator, cli::BatchConfig};
 
 mod batching;
 mod cli;
+mod errors;
 
 fn handle(config: BatchConfig) -> Result<()> {
     let file = File::open(config.input_path).context("Cannot open input file")?;
