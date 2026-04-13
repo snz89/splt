@@ -45,3 +45,14 @@ pub struct SplitArgs {
     #[arg(short, long, default_value = "batches")]
     pub output_dir: PathBuf,
 }
+
+#[derive(Args)]
+#[command(about = "Converts an .ipynb file to a regular .py file")]
+pub struct IpynbConvertArgs {
+    /// Input file to process
+    pub input_path: Option<PathBuf>,
+
+    /// Path to the file where the result will be saved
+    #[arg(short, long, default_value = "batches")]
+    pub output_dir: Option<PathBuf>,
+}
