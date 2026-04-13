@@ -12,8 +12,9 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Split(split_args) => commands::split::handle(split_args)?,
+        Commands::Split(args) => commands::split::handle(args)?,
+        Commands::Ipynb(args) => commands::ipynb::handle(args)?,
     };
-    
+
     Ok(())
 }

@@ -23,6 +23,7 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Commands {
     Split(SplitArgs),
+    Ipynb(IpynbConvertArgs)
 }
 
 #[derive(Args)]
