@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use clap::{
-    Parser,
+    Args, Parser, Subcommand,
     builder::{Styles, styling::AnsiColor},
 };
 
@@ -13,9 +13,21 @@ fn get_styles() -> Styles {
         .placeholder(AnsiColor::Blue.on_default())
 }
 
-#[derive(Debug, Parser)]
-#[command(about = "Split a file into multiple batches", long_about = None, styles = get_styles(), version)]
-pub struct BatchConfig {
+#[derive(Parser)]
+#[command(long_about = None, styles = get_styles(), version)]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command: Commands,
+}
+
+#[derive(Subcommand)]
+pub enum Commands {
+    Split(SplitArgs),
+}
+
+#[derive(Args)]
+#[command(about = "Split a file into multiple batches")]
+pub struct SplitArgs {
     /// Input file to process
     pub input_path: Option<PathBuf>,
 

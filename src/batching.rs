@@ -1,12 +1,14 @@
-use std::{
-    collections::VecDeque,
-    fs,
-    io::{self},
-    iter::Peekable,
-    path::Path,
-};
+use std::{collections::VecDeque, iter::Peekable};
 
 use crate::errors::NotEnoughWeightsError;
+
+fn line_weight(length: usize, max_length: usize) -> usize {
+    if length == 0 {
+        return 1;
+    }
+
+    (length - 1) / max_length + 1
+}
 
 #[derive(Debug)]
 pub struct Batch {
@@ -44,14 +46,6 @@ impl Batch {
     pub fn lines(&self) -> &[String] {
         &self.inner
     }
-}
-
-pub fn line_weight(length: usize, max_length: usize) -> usize {
-    if length == 0 {
-        return 1;
-    }
-
-    (length - 1) / max_length + 1
 }
 
 pub struct BatchesIterator<Lines, Weights>
@@ -141,16 +135,4 @@ where
 
         if batch.is_empty() { None } else { Some(batch) }
     }
-}
-
-pub fn write_batches(batches: impl Iterator<Item = Batch>, output_dir: &Path) -> io::Result<()> {
-    fs::create_dir_all(output_dir)?;
-
-    for (batch_id, batch) in batches.enumerate() {
-        let batch_path = output_dir.join(format!("batch_{batch_id}.txt"));
-        let content = batch.lines().join("\n");
-        fs::write(batch_path, content)?;
-    }
-
-    Ok(())
 }
