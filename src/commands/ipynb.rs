@@ -20,26 +20,29 @@ pub(crate) fn handle(args: IpynbConvertArgs) -> Result<()> {
             let file = File::open(path).context("Cannot open input file")?;
             Box::new(BufReader::new(file))
         }
-        None => Box::new(BufReader::new(io::stdin().lock())),
+        None => Box::new(io::stdin().lock()),
     };
 
     let notebook: Notebook = serde_json::from_reader(reader)?;
-    let code_sources = notebook
-        .cells
-        .into_iter()
-        .filter(|c| c.cell_type == "code")
-        .map(|c| c.source.join(""));
 
     let mut writer: Box<dyn Write> = match args.output_path {
         Some(path) => {
-            let file = File::create(path).context("Cannot open input file")?;
+            let file = File::create(path).context("Cannot create output file")?;
             Box::new(BufWriter::new(file))
         }
-        None => Box::new(BufWriter::new(io::stdout().lock())),
+        None => Box::new(io::stdout().lock()),
     };
 
-    for code in code_sources {
-        writeln!(writer, "{}", code)?;
+    let code_cells = notebook
+        .cells
+        .into_iter()
+        .filter(|c| c.cell_type == "code");
+
+    for cell in code_cells {
+        for line in cell.source {
+            write!(writer, "{}", line)?;
+        }
+        writeln!(writer)?;
     }
 
     writer.flush()?;
