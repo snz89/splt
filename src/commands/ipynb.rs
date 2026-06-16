@@ -33,12 +33,15 @@ pub(crate) fn handle(args: IpynbConvertArgs) -> Result<()> {
         None => Box::new(io::stdout().lock()),
     };
 
-    let code_cells = notebook
-        .cells
-        .into_iter()
-        .filter(|c| c.cell_type == "code");
+    let code_cells = notebook.cells.into_iter().filter(|c| c.cell_type == "code");
 
+    let mut cell_index = args.cell_start_index;
     for cell in code_cells {
+        if args.cell_headers_enabled {
+            writeln!(writer, "# {}{}", args.cell_prefix, cell_index)?;
+            cell_index += 1;
+        }
+
         for line in cell.source {
             write!(writer, "{}", line)?;
         }
