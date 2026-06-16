@@ -5,6 +5,8 @@ use clap::{
     builder::{Styles, styling::AnsiColor},
 };
 
+use crate::commands;
+
 fn get_styles() -> Styles {
     Styles::styled()
         .header(AnsiColor::Yellow.on_default())
@@ -20,10 +22,20 @@ pub struct Cli {
     pub command: Commands,
 }
 
+impl Cli {
+    pub fn run(self) -> anyhow::Result<()> {
+        match self.command {
+            Commands::Split(args) => commands::split::handle(args)?,
+            Commands::Ipynb(args) => commands::ipynb::handle(args)?,
+        }
+        Ok(())
+    }
+}
+
 #[derive(Subcommand)]
 pub enum Commands {
     Split(SplitArgs),
-    Ipynb(IpynbConvertArgs)
+    Ipynb(IpynbConvertArgs),
 }
 
 #[derive(Args)]
