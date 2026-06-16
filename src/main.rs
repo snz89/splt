@@ -1,6 +1,6 @@
 use clap::Parser;
 
-use crate::cli::{Cli};
+use crate::cli::Cli;
 
 mod batching;
 mod cli;

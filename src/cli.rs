@@ -7,7 +7,7 @@ use clap::{
 
 use crate::commands;
 
-fn get_styles() -> Styles {
+const fn get_styles() -> Styles {
     Styles::styled()
         .header(AnsiColor::Yellow.on_default())
         .usage(AnsiColor::Green.on_default())

@@ -2,7 +2,7 @@ use std::{collections::VecDeque, iter::Peekable};
 
 use crate::errors::NotEnoughWeightsError;
 
-fn line_weight(length: usize, max_length: usize) -> usize {
+const fn line_weight(length: usize, max_length: usize) -> usize {
     if length == 0 {
         return 1;
     }
@@ -19,7 +19,7 @@ pub struct Batch {
 }
 
 impl Batch {
-    pub fn new(max_line_length: usize, max_weight: usize) -> Self {
+    pub const fn new(max_line_length: usize, max_weight: usize) -> Self {
         Self {
             inner: Vec::new(),
             max_line_length,
@@ -34,7 +34,7 @@ impl Batch {
         self.inner.push(value);
     }
 
-    pub fn is_empty(&self) -> bool {
+    pub const fn is_empty(&self) -> bool {
         self.inner.is_empty()
     }
 

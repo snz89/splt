@@ -12,7 +12,7 @@ use crate::{
     errors::TerminalInputNotSupportedError,
 };
 
-pub(crate) fn handle(args: SplitArgs) -> Result<()> {
+pub fn handle(args: SplitArgs) -> Result<()> {
     if args.input_path.is_none() && io::stdin().is_terminal() {
         bail!(TerminalInputNotSupportedError);
     }

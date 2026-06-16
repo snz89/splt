@@ -10,7 +10,7 @@ use anyhow::{Context, Result, bail};
 
 use crate::errors::TerminalInputNotSupportedError;
 
-pub(crate) fn handle(args: IpynbConvertArgs) -> Result<()> {
+pub fn handle(args: IpynbConvertArgs) -> Result<()> {
     if args.input_path.is_none() && io::stdin().is_terminal() {
         bail!(TerminalInputNotSupportedError);
     }
@@ -43,7 +43,7 @@ pub(crate) fn handle(args: IpynbConvertArgs) -> Result<()> {
         }
 
         for line in cell.source {
-            write!(writer, "{}", line)?;
+            write!(writer, "{line}")?;
         }
         writeln!(writer)?;
     }

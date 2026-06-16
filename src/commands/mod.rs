@@ -1,2 +1,2 @@
-pub(crate) mod split;
-pub(crate) mod ipynb;
+pub mod ipynb;
+pub mod split;
