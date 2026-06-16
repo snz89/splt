@@ -72,14 +72,14 @@ pub struct IpynbConvertArgs {
     pub output_path: Option<PathBuf>,
 
     /// Add a comment header in the output file before each code cell
-    #[arg(short, long)]
-    pub cell_headers: bool,
+    #[arg(short, long = "cell_headers")]
+    pub cell_headers_enabled: bool,
 
     /// Starting index number for the cell header comments
-    #[arg(long, default_value_t = 1, requires = "cell_headers")]
+    #[arg(long, default_value_t = 1, requires = "cell_headers_enabled")]
     pub cell_start_index: u32,
 
     /// Prefix text placed before the index number in the cell header comments
-    #[arg(long, default_value = "Cell ", requires = "cell_headers")]
+    #[arg(long, default_value = "Cell ", requires = "cell_headers_enabled")]
     pub cell_prefix: String,
 }
